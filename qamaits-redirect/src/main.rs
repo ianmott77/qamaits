@@ -47,7 +47,7 @@ async fn main() {
         address_arr[i] = add_vec[i].parse().unwrap();
     }
     println!("Host: {}", host.lock().unwrap().as_ref().unwrap());
-    println!("Running at {:?}:{:?}", address, 80);
+    println!("Running at {}:{}", address.unwrap(), 80);
     warp::serve(redirect_to_https)
         .run((address_arr, port))
         .await;
