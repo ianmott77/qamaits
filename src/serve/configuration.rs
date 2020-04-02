@@ -30,13 +30,16 @@ impl NewCollectionOptions {
 pub struct DB{
     pub uri: String,
     pub name: String,
-    pub collections: Option<Vec<NewCollectionOptions>>,
+    pub collections: Option<Vec<NewCollectionOptions>>
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ServerConfig{
     pub address: String,
-    pub port: u16
+    pub port: u16,
+    pub access_log: String,
+    pub tls_key: String,
+    pub tls_cert: String
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

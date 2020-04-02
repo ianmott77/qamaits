@@ -34,7 +34,7 @@ impl Oauth {
             )),
         )
         .set_redirect_url(RedirectUrl::new(
-            Url::parse(&format!("http://localhost/oauth-validate/{}", config.name)).unwrap(),
+            Url::parse(&format!("https://localhost/oauth-validate/{}", config.name)).unwrap(),
         ));
 
         for scope in config.clone().scope {
