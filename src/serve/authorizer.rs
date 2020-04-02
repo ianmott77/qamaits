@@ -26,7 +26,7 @@ impl Authorizer{
         let auth = self.auths.lock().unwrap();
         let authr = auth.get(&provider);
         if authr.is_some(){
-            println!("Browse to: {}", authr.clone().unwrap().auth_url.clone().into_string());
+            println!("\nTo authorize {} browse to:\n{}\n", provider, authr.clone().unwrap().auth_url.clone().into_string());
         }else{
             println!("That OAuth provider wasn't found in your config file")
         }

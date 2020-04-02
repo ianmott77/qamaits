@@ -10,11 +10,11 @@ use std::fs;
 use std::fs::{File, OpenOptions};
 use std::io::Write;
 use std::path::Path;
+use std::process::Command;
 use std::sync::{Arc, Mutex};
 use std::time::SystemTime;
 use warp::filters::log::Info;
 use warp::Filter;
-use std::process::Command;
 
 #[tokio::main]
 async fn main() {
@@ -32,13 +32,13 @@ async fn main() {
                 let auth = config.configuration.oauth.auths[i].clone();
                 let serve = Arc::clone(&serve);
                 let server = serve.lock().unwrap();
-                match DatabaseController::get_oauth_record(&server, auth.clone().name) {
+                match DatabaseController::get_oauth_record(&server.clone(), auth.clone().name) {
                     Ok(conf) => {
                         config.configuration.oauth.auths[i] = conf;
                     }
                     Err(_) => {
-                        let serve = Arc::clone(&serve);
-                        authorizer = authorizer.add_oauth(Oauth::new(auth.clone(), serve));
+                        let aut = Oauth::new(auth.clone(), server.clone());
+                        authorizer = authorizer.add_oauth(aut);
                         auths.push(auth.clone().name);
                     }
                 }
@@ -122,15 +122,18 @@ async fn main() {
                 .with(log);
 
             println!(
-                "Running at {:?}:{:?}",
-                server.clone().address,
+                "Running at {}:{}",
+                config.clone().configuration.server.address,
                 server.clone().port
             );
-            println!("Database: {:?}", server.clone().database.database.name());
+            println!("Database: {}", server.clone().database.database.name());
             Command::new("./qamaits-redirect")
-            .arg("-host").arg("localhost")
-            .arg("-address").arg("127.0.0.1")
-            .spawn().unwrap();
+                .arg("-host")
+                .arg(config.clone().configuration.server.hostname)
+                .arg("-address")
+                .arg(config.clone().configuration.server.address)
+                .spawn()
+                .unwrap();
             warp::serve(routes)
                 .tls()
                 .key_path(config.clone().configuration.clone().server.tls_key)

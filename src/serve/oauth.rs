@@ -24,17 +24,18 @@ pub struct Oauth {
 }
 
 impl Oauth {
-    pub fn new(config: OauthConfig, server: Arc<Mutex<Server>>) -> Self {
+    pub fn new(config: OauthConfig, serve: Server) -> Self {
+        let redirect_url = format!("https://{}/oauth-validate/{}", serve.hostname, config.name);
         let mut client = BasicClient::new(
             ClientId::new(config.clone().client_id),
             Some(ClientSecret::new(config.clone().client_secret)),
-            AuthUrl::new(Url::parse("https://accounts.google.com/o/oauth2/v2/auth").unwrap()),
+            AuthUrl::new(Url::parse(&config.clone().auth_url).unwrap()),
             Some(TokenUrl::new(
-                Url::parse("https://www.googleapis.com/oauth2/v3/token").unwrap(),
+                Url::parse(&config.clone().token_url).unwrap(),
             )),
         )
         .set_redirect_url(RedirectUrl::new(
-            Url::parse(&format!("https://localhost/oauth-validate/{}", config.name)).unwrap(),
+            Url::parse(&redirect_url).unwrap(),
         ));
 
         for scope in config.clone().scope {
@@ -47,7 +48,7 @@ impl Oauth {
             name: config.clone().name,
             config,
             client,
-            server,
+            server: Arc::new(Mutex::new(serve.clone())),
             csrf_token,
             auth_url,
         }
@@ -69,22 +70,23 @@ impl Oauth {
                         self.config.clone(),
                     ) {
                         Ok(id) => {
-                            println!("New Oauth Record Added\nID: {}", id.unwrap());
-                            warp::reply::json(&doc! {"status" : "success"})
+                            let message = format!("New Oauth Record Added\nID: {}", id.unwrap());
+                            warp::reply::json(&doc! {"status" : "success", "message": message})
                         }
                         Err(e) => {
-                            println!("{:?}", e);
-                            warp::reply::json(&doc! {"status" : "fail"})
+                            let message = format!("{:?}", e);
+                            warp::reply::json(&doc! {"status" : "fail", "message": message})
                         }
                     }
                 }
                 Err(e) => {
-                    println!("{:?}", e);
-                    warp::reply::json(&doc! {"status" : "fail"})
+                    let message = format!("{:?}", e);
+                    warp::reply::json(&doc! {"status" : "fail", "message": message})
                 }
             }
         } else {
-            warp::reply::json(&doc! {"status" : "fail"})
+            let message = format!("The CSRF Tokens did not match\nOriginal: {:?}\nReturned: {:?}", self.csrf_token, state);
+            warp::reply::json(&doc! {"status" : "fail", "message": message})
         }
     }
 }

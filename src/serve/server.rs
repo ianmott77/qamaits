@@ -7,6 +7,7 @@ pub struct Server {
     pub database: DatabaseController,
     pub address: [u8; 4],
     pub port: u16,
+    pub hostname: String
 }
 
 impl Server {
@@ -23,7 +24,8 @@ impl Server {
                 Ok(Server {
                     database: db,
                     address: address_arr,
-                    port: conf.as_ref().unwrap().server.port,
+                    port: conf.clone().as_ref().unwrap().server.port,
+                    hostname: conf.clone().unwrap().server.clone().hostname
                 })
             }
             Err(e) => {

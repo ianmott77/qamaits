@@ -39,7 +39,8 @@ pub struct ServerConfig{
     pub port: u16,
     pub access_log: String,
     pub tls_key: String,
-    pub tls_cert: String
+    pub tls_cert: String,
+    pub hostname: String
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -47,6 +48,8 @@ pub struct OauthConfig{
     pub name: String,
     pub client_id: String,
     pub client_secret: String,
+    pub auth_url: String,
+    pub token_url: String,
     pub scope: Vec<String>,
     pub api_key: String,
     pub access_token: Option<String>,
