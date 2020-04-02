@@ -18,9 +18,9 @@ hostname = "localhost"
 
 [oauth]
 auths = [
-    {name = "google", client_id = "310275617031-hshscsl18isn7dndjqe1kgb0apsj7b0r.apps.googleusercontent.com", client_secret = "VYj3hgFs42W_glikGqGXZb-S", auth_url = "https://accounts.google.com/o/oauth2/v2/auth", token_url = "https://www.googleapis.com/oauth2/v3/token", scope = ["https://www.googleapis.com/auth/gmail.send"], api_key = "AIzaSyByd0SacdforVc4_K8ZEJlpRSgu4hy1NUI"},
+    {name = "google", client_id = "CLIENT_ID", client_secret = "CLIENT_SECRET", auth_url = "https://accounts.google.com/o/oauth2/v2/auth", token_url = "https://www.googleapis.com/oauth2/v3/token", scope = ["https://www.googleapis.com/auth/gmail.send"], api_key = "API_KEY"},
 ]
 
 [email]
-from_address = "mott.ian77@gmail.com"
+from_address = "EMAIL_ADDRESS"
 provider = "google"
