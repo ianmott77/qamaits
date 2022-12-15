@@ -1,0 +1,33 @@
+[database]
+uri = "mongodb://127.0.0.1:27017"
+name = "qamaits"
+collections = [
+    {name ="users"},
+    {name="posts"},
+    {name="media"},
+    {name="oauth"},
+]
+
+[server]
+address = "127.0.0.1"
+port = 443
+access_log = "access_log.log"
+tls_key = "tls/localhost+2-key.pem"
+tls_cert = "tls/localhost+2.pem"
+hostname = "localhost"
+front_end_directory = "www/build"
+front_end_repository = "https://github.com/JohnD-Ottawa/ca.484rideau.git"
+repository_key = "ffa31dbf598e51fe2cf1f22c42927d0de7699e7a"
+front_end_build_directory = "www"
+front_end_build = "www/build"
+front_end_install_script = ["npm", "install"]
+front_end_build_script = ["npm", "run", "build"]
+
+[oauth]
+auths = [
+    {name = "google", client_id = "310275617031-hshscsl18isn7dndjqe1kgb0apsj7b0r.apps.googleusercontent.com", client_secret = "VYj3hgFs42W_glikGqGXZb-S", auth_url = "https://accounts.google.com/o/oauth2/v2/auth", token_url = "https://www.googleapis.com/oauth2/v3/token", scope = ["https://www.googleapis.com/auth/gmail.send"], api_key = "AIzaSyByd0SacdforVc4_K8ZEJlpRSgu4hy1NUI"},
+]
+
+[email]
+from_address = "mott.ian77@gmail.com"
+provider = "google"

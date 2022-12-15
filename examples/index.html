@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" href="assets/css/materialize.min.css" media="screen,projection" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body>
+    <div class="row">
+        <form class="col s12" />
+        <span>
+            <h2>Login</h2>
+            <i class="material-icons prefix">account_circle</i>
+        </span>
+        <div class="input-field">
+            <input id="icon_prefix" type="text" class="username validate">
+            <label for="icon_prefix">Username</label>
+        </div>
+        <div class="input-field">
+            <input id="icon_prefix2" type="password" class="password validate">
+            <label for="icon_prefix2">Password</label>
+        </div>
+        <button class="btn waves-effect waves-light" type="button" name="action">Login
+            <i class="material-icons right">send</i>
+        </button>
+        </form>
+    </div>
+
+    <script type="text/javascript" src="assets/js/materialize.min.js"></script>
+    <script>
+        document.querySelector('.btn').addEventListener('click', (e) => {
+            let data = {
+                data: {
+                    username: document.querySelector(".username").value.trim(),
+                    password: document.querySelector(".password").value.trim()
+                }
+            }
+            fetch('/api/1/login/', {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors', // no-cors, *cors, same-origin
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                headers: {
+                    'Content-Type': 'application/json'
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                redirect: 'follow', // manual, *follow, error
+                referrerPolicy: 'no-referrer', // no-referrer, *client
+                body: JSON.stringify(data) // body data type must match "Content-Type" header
+            }).then((res) => {
+                res.json().then((results) => {
+                    if (results.status == "success") {
+                        document.write("Login Successful")
+                    } else {
+                        document.write(results.data)
+                    }
+                })
+            });
+        })
+    </script>
+</body>
+
+</html>
